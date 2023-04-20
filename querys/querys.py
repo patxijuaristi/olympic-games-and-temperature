@@ -1,29 +1,54 @@
+from datetime import datetime, timezone
 
-
+# Query que devuelve la temperatura media de una ciudad
+# entre un rango de fechas especifico, en unidades celsius
 def get_avg_temperature(client, city, start_date, end_date):
-    splitted_start_date = start_date.split('/')
-    splitted_end_date = start_date.split('/') 
 
     return client['olympics']['daily_temperature'].aggregate([
-        {
-            '$match': {
-                'City': city, 
-                '$and': [
-                    {'$expr': {'$gte': [{'$toInt': '$Year'}, 1996]}
-                    }, {'$expr': {'$lte': [{'$toInt': '$Year'}, 1996]}
-                    }, {'$expr': {'$gte': [{'$toInt': '$Month'}, 1]}
-                    }, {'$expr': {'$lte': [{'$toInt': '$Month'}, 12]}
-                    }, {'$expr': {'$gte': [{'$toInt': '$Day'}, 1]}
-                    }, {'$expr': {'$lte': [{'$toInt': '$Day'}, 31]}
+    {
+        # Con el comando addFields, añadimos un campo con el datetime concatenando los tres atributos de "Year", "Month" y "Day"
+        '$addFields': {
+            'datetime': {
+                '$dateFromString': {
+                    'dateString': {
+                        '$concat': [
+                            { '$toString': { '$toInt': '$Year' } },
+                            '-',
+                            { '$toString': { '$toInt': '$Month' } },
+                            '-',
+                            { '$toString': { '$toInt': '$Day' } }
+                        ]
                     }
-                ]
-            }
-        }, {
-            '$group': {
-                '_id': None, 
-                'AvgTemperature': {
-                    '$avg': {'$toDouble': '$AvgTemperature'}
                 }
             }
         }
-    ]).next()
+    }, {
+        # Con el match filtramos los resultados por la ciudad y el rango de fechas
+        '$match': {
+            '$and': [
+                { 'City': city },
+                { 'datetime': {
+                        '$gte': datetime.strptime(start_date, '%d/%m/%Y'), 
+                        '$lte': datetime.strptime(end_date, '%d/%m/%Y')
+                    }
+                }
+            ]
+        }
+    }, {
+        # Y con el group calculamos la temperatura media del periodo de tiempo y lo convertimos de Fahrenheit a Celsius
+        '$group': {
+            '_id': 0, 
+            'PeriodAvgTemperature': {
+                '$avg': {
+                    '$multiply': [
+                        { '$divide': [
+                            { '$subtract': [
+                                { '$toDouble': '$AvgTemperature' }, 32
+                            ]}, 1.8
+                        ]}, 1.0
+                    ]
+                }
+            }
+        }
+    }
+]).next()
