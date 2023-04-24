@@ -9,6 +9,6 @@ load_dotenv()
 client = MongoClient(os.environ['MONGO_CLIENT'])
 
 print('---------')
-result = get_avg_temperature(client, 'Madrid','23/03/1999','20/07/1999')
-print(result['AvgTemperature'])
+result = get_avg_temperature(client, 'Bilbao','01/09/2018','05/09/2018')
+print(result['PeriodAvgTemperature'])
 print('---------')
