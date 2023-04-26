@@ -12,6 +12,8 @@ test_server.py
 
 *.so
 
+data/**/*test*
+
 .env
 .Python
 build/
