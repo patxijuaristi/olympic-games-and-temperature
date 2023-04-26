@@ -46,7 +46,7 @@ for i, row in df.iterrows():
     avg_temps.append(avg_temp)
 
 # Añadir la lista de temperaturas medias como una nueva columna en el data frame
-df['Avg. temperature'] = avg_temps
+df['Avg temperature'] = avg_temps
 
 # Guardar el DataFrame en un nuevo archivo CSV que será luego importando a MongoDB como una colección nueva
 df.to_csv('data/fechas_olimpiadas_limpias_test.csv', index=False)
