@@ -1,5 +1,3 @@
-import sys
-sys.path.append('.')
 import pandas as pd
 from pymongo import MongoClient
 import os
@@ -14,7 +12,7 @@ load_dotenv()
 client = MongoClient(os.environ['MONGO_CLIENT'])
 
 # Leer el archivo CSV
-df = pd.read_csv('data/fechas_olimpiadas_test.csv')
+df = pd.read_csv('../data/fechas_olimpiadas.csv')
 
 # Convertir las fechas a objetos de tipo datetime
 df['Opening ceremony'] = pd.to_datetime(df['Opening ceremony'], dayfirst=True, errors='coerce')
@@ -49,4 +47,4 @@ for i, row in df.iterrows():
 df['Avg temperature'] = avg_temps
 
 # Guardar el DataFrame en un nuevo archivo CSV que será luego importando a MongoDB como una colección nueva
-df.to_csv('data/fechas_olimpiadas_limpias_test.csv', index=False)
+df.to_csv('../data/fechas_olimpiadas_limpias.csv', index=False)

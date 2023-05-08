@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Leer el fichero CSV como un dataframe de pandas
-df = pd.read_csv('city_temperature.csv', encoding='utf-8')
+df = pd.read_csv('../data/city_temperature.csv', encoding='utf-8')
 
 # Filtrar las regiones para sin los valores de África
 # porque nunca se han celebrado los juegos olimpicos en África
@@ -22,5 +22,8 @@ df = df[~((df['Region'] == 'South/Central America & Carribean') & (df['City'] !=
 # Borramos la columna 'State' porque solo se usa para ciudades de EEUU
 df.drop('State', axis=1, inplace=True)
 
-# Escribit el nuevo dataset filtrado
-df.to_csv('filtered_file.csv', index=False, encoding='utf-8')
+# Borrar los outliers, que son los que tienen el valor -99.0 como temperatura
+df = df[df['AvgTemperature'] != -99.0]
+
+# Escribir el nuevo dataset filtrado
+df.to_csv('../data/filtered_city_temperatures.csv', index=False, encoding='utf-8')

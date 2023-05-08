@@ -14,6 +14,9 @@ test_server.py
 
 data/**/*test*
 
+# No incluimos el dataset de city temperature por su tamaño
+city_temperature.csv
+
 .env
 .Python
 build/

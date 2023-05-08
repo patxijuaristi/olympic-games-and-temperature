@@ -59,3 +59,83 @@ def get_avg_temperature(client, city, start_date, end_date):
         first_result = None
     
     return first_result
+
+def get_best_country_in_sport(client, sport):
+    result = client['olympics']['athlete_events'].aggregate([
+        {
+            '$match': {
+                'Sport': sport, 
+                'Medal': { '$ne': 'NA' }
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'Team': '$Team', 
+                    'Medal': '$Medal'
+                }, 
+                'count': { '$sum': 1 }
+            }
+        }, {
+            '$group': {
+                '_id': '$_id.Team', 
+                'medals': {
+                    '$push': {
+                        'medal': '$_id.Medal', 
+                        'count': '$count'
+                    }
+                }, 
+                'total': { '$sum': '$count' }
+            }
+        }, {
+            '$project': {
+                '_id': 0, 
+                'country': '$_id', 
+                'total_medals': '$total', 
+                'medals': 1
+            }
+        }, {
+            '$sort': { 'total_medals': -1 }
+        }
+    ])
+
+    return result
+
+def get_best_sport_for_country(client, country):
+    result = client['olympics']['athlete_events'].aggregate([
+        {
+            '$match': {
+                'Team': country, 
+                'Medal': { '$ne': 'NA' }
+            }
+        }, {
+            '$group': {
+                '_id': {
+                    'Sport': '$Sport', 
+                    'Medal': '$Medal'
+                }, 
+                'count': { '$sum': 1 }
+            }
+        }, {
+            '$group': {
+                '_id': '$_id.Sport', 
+                'medals': {
+                    '$push': {
+                        'medal': '$_id.Medal', 
+                        'count': '$count'
+                    }
+                }, 
+                'total': { '$sum': '$count' }
+            }
+        }, {
+            '$project': {
+                '_id': 0, 
+                'sport': '$_id', 
+                'total_medals': '$total', 
+                'medals': 1
+            }
+        }, {
+            '$sort': { 'total_medals': -1 }
+        }
+    ])
+
+    return result
