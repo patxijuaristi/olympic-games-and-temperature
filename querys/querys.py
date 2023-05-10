@@ -113,7 +113,9 @@ def get_best_sport_for_country(client, country):
                 'Team': country, 
                 'Medal': { '$ne': 'NA' }
             }
-        }, {
+        },
+        {
+            # Agrupar por deporte y sumar la cantidad total de medallas
             '$group': {
                 '_id': {
                     'Sport': '$Sport', 
@@ -155,7 +157,9 @@ def country_better_winter_or_summer(client, country):
                 'Team': country, 
                 'Medal': { '$ne': 'NA' }
             }
-        }, {
+        }, 
+        {
+            # Sumar cantidad total de medallas y cantidad por temporada
             '$group': {
                 '_id': None, 
                 'totalMedals': { '$sum': 1 }, 
@@ -166,7 +170,9 @@ def country_better_winter_or_summer(client, country):
                     '$sum': { '$cond': [ { '$eq': [ '$Season', 'Winter' ] }, 1, 0 ] }
                 }
             }
-        }, {
+        },
+        {
+            # Calcular los porcentajes de medallas por temporada
             '$addFields': {
                 'percentSummer': {
                     '$concat': [ { '$toString': { '$round': [ { '$multiply': [ { '$divide': [ '$medalsSummer', '$totalMedals' ] }, 100 ] }, 2 ] } }, '%' ]
@@ -266,6 +272,126 @@ def country_most_medals_by_temperature(client, country):
             }
         },
         { '$sort': { 'MedalCount': -1 } }
+    ])
+
+    return result
+
+def compare_two_country_results_by_temperature(client, country1, country2):
+    result = client['olympics']['athlete_events'].aggregate([
+        {
+            '$match': {
+                '$or': [
+                    {
+                        'Team': country1
+                    }, {
+                        'Team': country2
+                    }
+                ]
+            }
+        }, {
+            '$lookup': {
+                'from': 'olympics_dates', 
+                'let': {
+                    'year': '$Year', 
+                    'city': '$City'
+                }, 
+                'pipeline': [
+                    {
+                        '$match': {
+                            '$expr': {
+                                '$and': [
+                                    {
+                                        '$eq': [
+                                            '$Year', '$$year'
+                                        ]
+                                    }, {
+                                        '$eq': [
+                                            '$City', '$$city'
+                                        ]
+                                    }, {
+                                        '$eq': [
+                                            '$Season', '$Season'
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ], 
+                'as': 'olympics_dates'
+            }
+        }, {
+            '$unwind': '$olympics_dates'
+        }, {
+            '$group': {
+                '_id': {
+                    'Year': '$Year', 
+                    'City': '$City', 
+                    'Avg temperature': '$olympics_dates.Avg temperature'
+                }, 
+                country1+'Medals': {
+                    '$sum': {
+                        '$cond': [
+                            {
+                                '$and': [
+                                    {
+                                        '$eq': [
+                                            '$Team', country1
+                                        ]
+                                    }, {
+                                        '$ne': [
+                                            '$Medal', 'NA'
+                                        ]
+                                    }
+                                ]
+                            }, 1, 0
+                        ]
+                    }
+                }, 
+                country2+'Medals': {
+                    '$sum': {
+                        '$cond': [
+                            {
+                                '$and': [
+                                    {
+                                        '$eq': [
+                                            '$Team', country2
+                                        ]
+                                    }, {
+                                        '$ne': [
+                                            '$Medal', 'NA'
+                                        ]
+                                    }
+                                ]
+                            }, 1, 0
+                        ]
+                    }
+                }
+            }
+        }, {
+            '$project': {
+                '_id': 0, 
+                'Year': '$_id.Year', 
+                'City': '$_id.City', 
+                'Avg temperature': {
+                    '$toDouble': {
+                        '$cond': [
+                            {
+                                '$eq': [
+                                    '$_id.Avg temperature', ''
+                                ]
+                            }, -99, '$_id.Avg temperature'
+                        ]
+                    }
+                }, 
+                country1+'Medals': 1, 
+                country2+'Medals': 1
+            }
+        }, {
+            '$sort': {
+                'Avg temperature': -1
+            }
+        }
     ])
 
     return result
