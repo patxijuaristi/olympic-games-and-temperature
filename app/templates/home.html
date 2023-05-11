@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<header class="py-5 bg-image-full" style="background-image: url('/static/assets/olympics_wallpaper.jpg');max-height: 700px;">
+    <div class="text-center my-5">
+        <img class="img-fluid rounded-circle mb-4" src="{{ url_for('static', filename='assets/olympics-logo.png') }}" alt="Olympics logo" style="max-height: 350px;" />
+        <h1 class="text-dark fs-3 fw-bolder">OLYMPIC GAMES STUDY</h1>
+        <p class="text-dark-50 mb-0">Study performed using MongoDB and Python</p>
+    </div>
+</header>
+<!-- Content section-->
+<section class="py-5">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <h2>Study about the Olympic Games and Temperature</h2>
+                <p class="lead">In this website it is shown the project that has been carried out in the data science subjet for the UMA Computer Science Master's degree.</p>
+                <p class="mb-0">The project consists of studying data about the olympic games and temperature, performing data transformations, data wrangling, data science funtions and visualization techniques. All that has been carried out using MongoDB and Python.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

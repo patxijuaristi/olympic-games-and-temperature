@@ -281,11 +281,8 @@ def compare_two_country_results_by_temperature(client, country1, country2):
         {
             '$match': {
                 '$or': [
-                    {
-                        'Team': country1
-                    }, {
-                        'Team': country2
-                    }
+                    { 'Team': country1 },
+                    { 'Team': country2 }
                 ]
             }
         }, {
@@ -300,19 +297,9 @@ def compare_two_country_results_by_temperature(client, country1, country2):
                         '$match': {
                             '$expr': {
                                 '$and': [
-                                    {
-                                        '$eq': [
-                                            '$Year', '$$year'
-                                        ]
-                                    }, {
-                                        '$eq': [
-                                            '$City', '$$city'
-                                        ]
-                                    }, {
-                                        '$eq': [
-                                            '$Season', '$Season'
-                                        ]
-                                    }
+                                    { '$eq': [ '$Year', '$$year' ] },
+                                    { '$eq': [ '$City', '$$city' ] },
+                                    { '$eq': [ '$Season', '$Season' ] }
                                 ]
                             }
                         }
@@ -320,9 +307,9 @@ def compare_two_country_results_by_temperature(client, country1, country2):
                 ], 
                 'as': 'olympics_dates'
             }
-        }, {
-            '$unwind': '$olympics_dates'
-        }, {
+        },
+        { '$unwind': '$olympics_dates' },
+        {
             '$group': {
                 '_id': {
                     'Year': '$Year', 
@@ -334,15 +321,8 @@ def compare_two_country_results_by_temperature(client, country1, country2):
                         '$cond': [
                             {
                                 '$and': [
-                                    {
-                                        '$eq': [
-                                            '$Team', country1
-                                        ]
-                                    }, {
-                                        '$ne': [
-                                            '$Medal', 'NA'
-                                        ]
-                                    }
+                                    { '$eq': [ '$Team', country1 ] },
+                                    { '$ne': [ '$Medal', 'NA' ] }
                                 ]
                             }, 1, 0
                         ]
@@ -353,35 +333,24 @@ def compare_two_country_results_by_temperature(client, country1, country2):
                         '$cond': [
                             {
                                 '$and': [
-                                    {
-                                        '$eq': [
-                                            '$Team', country2
-                                        ]
-                                    }, {
-                                        '$ne': [
-                                            '$Medal', 'NA'
-                                        ]
-                                    }
+                                    { '$eq': [ '$Team', country2 ] },
+                                    { '$ne': [ '$Medal', 'NA' ] }
                                 ]
                             }, 1, 0
                         ]
                     }
                 }
             }
-        }, {
+        },
+        {
+            # Resultados a mostrar convirtiendo la temperatura a double y poniendo a -99 los vacíos
             '$project': {
                 '_id': 0, 
                 'Year': '$_id.Year', 
                 'City': '$_id.City', 
                 'Avg temperature': {
                     '$toDouble': {
-                        '$cond': [
-                            {
-                                '$eq': [
-                                    '$_id.Avg temperature', ''
-                                ]
-                            }, -99, '$_id.Avg temperature'
-                        ]
+                        '$cond': [ { '$eq': [ '$_id.Avg temperature', '' ] }, -99, '$_id.Avg temperature' ]
                     }
                 }, 
                 country1+'Medals': 1, 
