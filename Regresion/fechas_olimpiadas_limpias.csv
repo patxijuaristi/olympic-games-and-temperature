@@ -1,0 +1,53 @@
+City,Year,Opening ceremony,Closing ceremony,Season,Avg temperature
+Athens,1896,06/04/1896,15/04/1896,Winter,
+Paris,1900,14/05/1900,28/10/1900,Summer,
+St. Louis,1904,01/07/1904,23/11/1904,Summer,
+London,1908,27/04/1908,31/10/1908,Winter,
+Stockholm,1912,06/07/1912,22/07/1912,Summer,
+Antwerp,1920,14/08/1920,12/09/1920,Summer,
+Chamonix,1924,25/01/1924,05/02/1924,Winter,
+Paris,1924,05/07/1924,27/07/1924,Summer,
+St. Moritz,1928,11/02/1928,19/02/1928,Winter,
+Amsterdam,1928,28/07/1928,12/08/1928,Summer,
+Lake Placid,1932,04/02/1932,13/02/1932,Winter,
+Los Angeles,1932,30/07/1932,14/08/1932,Summer,
+Garmisch-Partenkirchen,1936,06/02/1936,16/02/1936,Winter,
+Berlin,1936,01/08/1936,16/08/1936,Summer,
+St. Moritz,1948,30/01/1948,08/02/1948,Winter,
+London,1948,29/07/1948,14/08/1948,Summer,
+Oslo,1952,14/02/1952,25/02/1952,Winter,
+Helsinki,1952,19/07/1952,03/08/1952,Summer,
+Cortina d'Ampezzo,1956,26/01/1956,05/02/1956,Winter,
+Squaw Valley,1960,18/02/1960,28/02/1960,Winter,
+Rome,1960,25/08/1960,11/09/1960,Summer,
+Innsbruck,1964,29/01/1964,09/02/1964,Winter,
+Tokyo,1964,10/10/1964,24/10/1964,Summer,
+Grenoble,1968,06/02/1968,18/02/1968,Winter,
+Mexico City,1968,12/10/1968,27/10/1968,Summer,
+Sapporo,1972,03/02/1972,13/02/1972,Winter,
+Munich,1972,26/08/1972,11/09/1972,Summer,
+Innsbruck,1976,04/02/1976,15/02/1976,Winter,
+Montreal,1976,17/07/1976,01/08/1976,Summer,
+Lake Placid,1980,13/02/1980,24/02/1980,Winter,
+Moscow,1980,19/07/1980,03/08/1980,Summer,
+Sarajevo,1984,08/02/1984,19/02/1984,Winter,
+Los Angeles,1984,28/07/1984,12/08/1984,Summer,
+Calgary,1988,13/02/1988,28/02/1988,Winter,
+Seoul,1988,17/09/1988,02/10/1988,Summer,
+Albertville,1992,08/02/1992,23/02/1992,Winter,
+Barcelona,1992,25/07/1992,09/08/1992,Summer,
+Lillehammer,1994,12/02/1994,27/02/1994,Winter,
+Atlanta,1996,19/07/1996,04/08/1996,Summer,26.31
+Nagano,1998,07/02/1998,22/02/1998,Winter,6.85
+Sydney,2000,15/09/2000,01/10/2000,Summer,12.98
+Salt Lake City,2002,08/02/2002,24/02/2002,Winter,-0.16
+Athens,2004,13/08/2004,29/08/2004,Summer,26.92
+Turin,2006,10/02/2006,26/02/2006,Winter,2.46
+Beijing,2008,08/08/2008,24/08/2008,Summer,24.98
+Vancouver,2010,12/02/2010,28/02/2010,Winter,7.07
+London,2012,27/07/2012,12/08/2012,Summer,17.69
+Sochi,2014,07/02/2014,23/02/2014,Winter,0.12
+Rio de Janeiro,2016,05/08/2016,21/08/2016,Summer,22.74
+Pyeongchang,2018,09/02/2018,25/02/2018,Winter,-1.05
+Tokyo,2020,23/07/2021,08/08/2021,Summer,28.94
+Beijing,2022,04/02/2022,20/02/2022,Winter,-6.78
