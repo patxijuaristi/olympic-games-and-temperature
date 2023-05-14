@@ -193,7 +193,7 @@ def country_better_winter_or_summer(client, country):
         }
     ])
 
-    return result
+    return next(result)
 
 # Consulta que devuelve la temperatura media de unos juegos olímpicos por año
 def get_olimpics_avg_temperature_by_year(client, year):

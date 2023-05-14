@@ -5,6 +5,22 @@ This is a project done for the Data Science subject of the Computer Engineering 
 
 The project aims to analyze the relation between the results of the olympic games and the temperature in the games.
 
+The project is structured in the next way:
+
+```
+.
+├── app                # Flask app to show results
+│
+├── data               # Folder that contains used datasets
+|
+├── querys             # MongoDB queries
+│
+├── regresion          # Jupyter notebook of regression work done to estimate temperatures
+│
+├── transformaciones   # Data pre-processing scripts
+└── ...
+```
+
 To use the scripts and the program, first it's necessary to create a virtual environemt and then install the required dependencies with pip in it. For that the next commands may be used:
 
 ```

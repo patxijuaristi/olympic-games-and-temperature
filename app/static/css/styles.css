@@ -10838,3 +10838,18 @@ textarea.form-control-lg {
   max-height: 500px; /* set the maximum height */
   overflow-y: auto; /* enable vertical scrolling */
 }
+.result-card-title{
+  text-align: center;
+  border-bottom: 2px solid black;
+  padding-bottom: 5px;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.result-card-text{
+  text-align: center;
+  font-size: 1.08rem;
+}
+.result-card{
+  box-shadow: 0px 0px 50px 2px rgba(0,0,0,0.8);
+  border: 3px solid #1d4cff;
+}
