@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+    <div class="container mt-3 mb-5">
+        <h3 class="query-title">Country Results by Season</h3>
+        <div class="row text-end">
+          <div class="col-12">
+              <a class="btn btn-danger" href="/queries">← Go back</a>
+          </div>
+        </div>
+        {% if not results %}
+        <div class="row">
+            <div class="col-12">
+                In this query you will obtain the comparison between the results obtained by two different countries.
+            </div>
+        </div>
+        <form method="post">
+            <div class="row mt-3">
+                <div class="col-8 d-flex form-row align-items-center mx-auto">
+                    <div class="input-group mx-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">📍</div>
+                        </div>
+                        <input type="text" class="form-control" id="country1" name="country1" placeholder="First country">
+                    </div>
+                    <div class="input-group mx-3">
+                      <div class="input-group-prepend">
+                          <div class="input-group-text">📍</div>
+                      </div>
+                      <input type="text" class="form-control" id="country2" name="country2" placeholder="Second Country">
+                  </div>
+                    <div class="col-auto ms-2">
+                        <button type="submit" class="btn btn-primary">🔍 Search</button>
+                    </div>
+                </div>
+            </div>
+          </form>
+        {% else %}
+        <h4 class="mt-2 text-center">Comparison between {{ country1 }} and {{ country2 }}</h4>
+        <div class="tablediv">
+            <table class="table table-striped table table-bordered text-center">
+                <thead class="bg-info sticky-top">
+                <tr>
+                  <th scope="col">Year 📅</th>
+                  <th scope="col">City 📍</th>
+                  <th scope="col">Temperature 🌡️</th>
+                  <th scope="col">Medals {{ country1 }} 🥇</th>
+                  <th scope="col">Medals {{ country2 }} 🥇</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for r in results %}
+                    <tr>
+                        <td class="fw-bold">{{ r.Year }}</td>
+                        <td>{{ r.City }}</td>
+                        <td>{{ r.Avg_temperature }}</td>
+                        <td>{{ r.Country1Medals }}</td>
+                        <td>{{ r.Country2Medals }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

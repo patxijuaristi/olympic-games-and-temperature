@@ -197,18 +197,19 @@ def country_better_winter_or_summer(client, country):
 
 # Consulta que devuelve la temperatura media de unos juegos olímpicos por año
 def get_olimpics_avg_temperature_by_year(client, year):
-    result = client['olympics']['olympics_dates'].aggregate([
-        {
-            '$match': { 'Year': year }
-        }, {
-            '$project': {
-                '_id': 0, 
-                'Avg temperature': { '$toDouble': '$Avg temperature' }
-            }
-        }
-    ])
-
     try:
+        result = client['olympics']['olympics_dates'].aggregate([
+            {
+                '$match': { 'Year': year }
+            }, {
+                '$project': {
+                    '_id': 0, 
+                    'Avg temperature': { '$toDouble': '$Avg temperature' }
+                }
+            }
+        ])
+
+    
         first_result = round(next(result)['Avg temperature'], 2)
     except:
         first_result = None
@@ -267,7 +268,7 @@ def country_most_medals_by_temperature(client, country):
                 'Year': '$_id.Year', 
                 'City': '$_id.City', 
                 'Season': '$_id.Season', 
-                'Avg temperature': '$_id.Avg temperature', 
+                'Avg_temperature': '$_id.Avg temperature', 
                 'MedalCount': 1
             }
         },
@@ -316,7 +317,7 @@ def compare_two_country_results_by_temperature(client, country1, country2):
                     'City': '$City', 
                     'Avg temperature': '$olympics_dates.Avg temperature'
                 }, 
-                country1+'Medals': {
+                'Country1Medals': {
                     '$sum': {
                         '$cond': [
                             {
@@ -328,7 +329,7 @@ def compare_two_country_results_by_temperature(client, country1, country2):
                         ]
                     }
                 }, 
-                country2+'Medals': {
+                'Country2Medals': {
                     '$sum': {
                         '$cond': [
                             {
@@ -348,17 +349,17 @@ def compare_two_country_results_by_temperature(client, country1, country2):
                 '_id': 0, 
                 'Year': '$_id.Year', 
                 'City': '$_id.City', 
-                'Avg temperature': {
+                'Avg_temperature': {
                     '$toDouble': {
                         '$cond': [ { '$eq': [ '$_id.Avg temperature', '' ] }, -99, '$_id.Avg temperature' ]
                     }
                 }, 
-                country1+'Medals': 1, 
-                country2+'Medals': 1
+                'Country1Medals': 1, 
+                'Country2Medals': 1
             }
         }, {
             '$sort': {
-                'Avg temperature': -1
+                'Avg_temperature': -1
             }
         }
     ])

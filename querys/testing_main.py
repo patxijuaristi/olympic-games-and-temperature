@@ -14,7 +14,7 @@ print('---------')
 #result = get_best_country_in_sport(client, 'Basketball')
 #result = get_best_sport_for_country(client, 'China')
 #result = country_better_winter_or_summer(client, 'China')
-#result = querys.get_olimpics_avg_temperature_by_year(client, '1988')
+#result = querys.get_olimpics_avg_temperature_by_year(client, '2016')
 #result = querys.country_most_medals_by_temperature(client, 'Spain')
 result = querys.compare_two_country_results_by_temperature(client, 'Spain', 'Norway')
 for r in result:

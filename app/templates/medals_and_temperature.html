@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="container mt-3 mb-5">
-        <h3 class="query-title">Results by Sport</h3>
+        <h3 class="query-title">Results by Country</h3>
         <div class="row text-end">
             <div class="col-12">
                 <a class="btn btn-danger" href="/queries">← Go back</a>
@@ -13,7 +13,7 @@
         {% if not results %}
         <div class="row">
             <div class="col-12">
-                In this query you will obtain the amount of medals that a sport has obtained in different sport in all history.
+                In this query you will obtain the amount of medals that a country has obtained in different sport in all history.
             </div>
         </div>
         <form method="post">
@@ -21,9 +21,9 @@
                 <div class="col-8 d-flex form-row align-items-center mx-auto">
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <div class="input-group-text">🏈</div>
+                            <div class="input-group-text">📍</div>
                         </div>
-                        <input type="text" class="form-control" id="sport" name="sport" placeholder="Sport">
+                        <input type="text" class="form-control" id="country" name="country" placeholder="Country">
                     </div>
                     <div class="col-auto ms-2">
                         <button type="submit" class="btn btn-primary">🔍 Search</button>
@@ -32,26 +32,30 @@
             </div>
           </form>
         {% else %}
-        <h4 class="mt-2 text-center">Results for {{ sport }}</h4>
+        <h4 class="mt-2 text-center">Results for {{ country }}</h4>
         <div class="tablediv">
             <table class="table table-striped table table-bordered text-center">
                 <thead class="bg-info sticky-top">
                 <tr>
-                    <th scope="col">Sport</th>
-                    <th scope="col">Bronze 🥉</th>
-                    <th scope="col">Silver 🥈</th>
-                    <th scope="col">Gold 🥇</th>
-                    <th scope="col">Total 🏆</th>
+                    <th scope="col">Year 📅</th>
+                    <th scope="col">City 📍</th>
+                    <th scope="col">Season 🏆</th>
+                    <th scope="col">Temperature 🌡️</th>
+                    <th scope="col">Medals 🥇</th>                    
                 </tr>
                 </thead>
                 <tbody>
                     {% for r in results %}
                     <tr>
-                        <td class="fw-bold">{{ r.country }}</td>
-                        <td>{{ r.gold }}</td>
-                        <td>{{ r.silver }}</td>
-                        <td>{{ r.bronze }}</td>
-                        <td>{{ r.total }}</td>
+                        <td>{{ r.Year }}</td>
+                        <td>{{ r.City }}</td>
+                        <td>{{ r.Season }}</td>
+                        {% if r.Avg_temperature %}
+                            <td>{{ r.Avg_temperature }}</td>
+                        {% else %}
+                            <td>N/A</td>
+                        {% endif %}
+                        <td class="fw-bold">{{ r.MedalCount }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

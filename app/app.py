@@ -3,7 +3,7 @@ sys.path.append('..')
 
 from flask import Flask, render_template, request
 from pymongo import MongoClient
-from querys.querys import get_best_sport_for_country, get_best_country_in_sport, country_better_winter_or_summer
+from querys.querys import get_best_sport_for_country, get_best_country_in_sport, country_better_winter_or_summer, country_most_medals_by_temperature, compare_two_country_results_by_temperature
 from dotenv import load_dotenv
 import os
 
@@ -18,7 +18,7 @@ app.config['STATIC_URL_PATH'] = '/static'
 def home():
     return render_template('home.html')
 
-@app.route('/querys')
+@app.route('/queries')
 def querys():
     return render_template('querys.html')
 
@@ -86,6 +86,30 @@ def country_results_by_season():
         result = []
     
     return render_template('country_results_by_season.html', country=country, result=result)
+
+@app.route('/medals-temperature', methods=['GET', 'POST'])
+def medals_and_temperature():
+    if request.method == 'POST':
+        country = request.form.get('country')
+        results = list(country_most_medals_by_temperature(client, country))
+    else:
+        country = ''
+        results = []
+
+    return render_template('medals_and_temperature.html', country=country, results=results)
+
+@app.route('/compare-countries-results', methods=['GET', 'POST'])
+def compare_countries_results_by_temperature():
+    if request.method == 'POST':
+        country1 = request.form.get('country1')
+        country2 = request.form.get('country2')
+        results = list(compare_two_country_results_by_temperature(client, country1, country2))
+    else:
+        country1 = ''
+        country2 = ''
+        results = []
+    
+    return render_template('compare_countries_results.html', country1=country1, country2=country2, results=results)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
