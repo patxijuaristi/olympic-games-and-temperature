@@ -402,7 +402,7 @@ def get_best_country_by_year(client):
                     'Year': '$_id.Year', 
                     'Season': '$_id.Season'
                 }, 
-                'TopTeam': {
+                'TopCountry': {
                     '$first': '$_id.Team'
                 }, 
                 'MedalCount': {
@@ -440,7 +440,7 @@ def get_best_country_by_year(client):
                 '_id': 0, 
                 'Year': '$_id.Year', 
                 'Season': '$_id.Season', 
-                'TopTeam': 1, 
+                'TopCountry': 1, 
                 'MedalCount': 1, 
                 'AvgTemperature': {
                     '$cond': {
@@ -458,8 +458,8 @@ def get_best_country_by_year(client):
             }
         },
         {
-            # Ordenar por temperatura descendente
-            '$sort': { 'AvgTemperature': -1 }
+            # Ordenar por más reciente a más antiguo
+            '$sort': { 'Year': -1 }
         }
     ])
 

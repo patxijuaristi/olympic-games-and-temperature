@@ -3,7 +3,7 @@ sys.path.append('..')
 
 from flask import Flask, render_template, request
 from pymongo import MongoClient
-from querys.querys import get_best_sport_for_country, get_best_country_in_sport, country_better_winter_or_summer, country_most_medals_by_temperature, compare_two_country_results_by_temperature
+from querys.querys import get_best_sport_for_country, get_best_country_in_sport, country_better_winter_or_summer, country_most_medals_by_temperature, compare_two_country_results_by_temperature, get_best_country_by_year
 from dotenv import load_dotenv
 import os
 
@@ -110,6 +110,12 @@ def compare_countries_results_by_temperature():
         results = []
     
     return render_template('compare_countries_results.html', country1=country1, country2=country2, results=results)
+
+@app.route('/best-country-per-games', methods=['GET'])
+def best_country_per_games():
+    results = list(get_best_country_by_year(client))
+    
+    return render_template('best_country_per_games.html', results=results)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
