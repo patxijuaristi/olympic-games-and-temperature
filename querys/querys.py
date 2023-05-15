@@ -365,3 +365,102 @@ def compare_two_country_results_by_temperature(client, country1, country2):
     ])
 
     return result
+# Consulta que devuelve una lista con todos los juegos olímpicos
+# (de invierno y de verano) junto con el país que más medallas ha 
+# conseguido, la cantidad y la temperatura media que hubo en dichos juegos.
+def get_best_country_by_year(client):
+    result = client['olympics']['athlete_events'].aggregate([
+        {
+            # Quitar los eventos sin medallas
+            '$match': { 'Medal': { '$ne': 'NA' } }
+        },
+        {
+            # Agrupar los juegos (obtenidos por año y temporada) por país
+            '$group': {
+                '_id': {
+                    'Year': '$Year', 
+                    'Season': '$Season', 
+                    'Team': '$Team'
+                },
+                # Sumar la cantidad de medallas de cada país en cada juego
+                'MedalCount': { '$sum': 1 }
+            }
+        },
+        {
+            # Ordenar por año, temporada y cantidad de medalls
+            '$sort': {
+                '_id.Year': 1, 
+                '_id.Season': 1, 
+                'MedalCount': -1
+            }
+        }, 
+        {
+            # Volver a agruparlos por año y temporada y coger el primer valor de país y medallas, 
+            # para así obtener el país que más medallas ha obtenido
+            '$group': {
+                '_id': {
+                    'Year': '$_id.Year', 
+                    'Season': '$_id.Season'
+                }, 
+                'TopTeam': {
+                    '$first': '$_id.Team'
+                }, 
+                'MedalCount': {
+                    '$first': '$MedalCount'
+                }
+            }
+        },
+        {
+            # Hacer lookup con el dataset de fechas de juegos y temperatura
+            '$lookup': {
+                'from': 'olympics_dates', 
+                'let': {
+                    'year': '$_id.Year', 
+                    'season': '$_id.Season'
+                }, 
+                'pipeline': [
+                    {
+                        '$match': {
+                            '$expr': {
+                                '$and': [
+                                    { '$eq': [ '$Year', '$$year' ] },
+                                    { '$eq': [ '$Season', '$$season' ] }
+                                ]
+                            }
+                        }
+                    }
+                ], 
+                'as': 'olympics_dates'
+            }
+        },
+        { '$unwind': '$olympics_dates' },
+        {
+            # Elegir los datos a mostrar
+            '$project': {
+                '_id': 0, 
+                'Year': '$_id.Year', 
+                'Season': '$_id.Season', 
+                'TopTeam': 1, 
+                'MedalCount': 1, 
+                'AvgTemperature': {
+                    '$cond': {
+                        'if': {
+                            '$eq': [
+                                '$olympics_dates.Avg temperature', ''
+                            ]
+                        }, 
+                        'then': -99.0, 
+                        'else': {
+                            '$toDouble': '$olympics_dates.Avg temperature'
+                        }
+                    }
+                }
+            }
+        },
+        {
+            # Ordenar por temperatura descendente
+            '$sort': { 'AvgTemperature': -1 }
+        }
+    ])
+
+    return result
