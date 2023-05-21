@@ -22,6 +22,14 @@ def home():
 def querys():
     return render_template('querys.html')
 
+@app.route('/visualization-temperature')
+def visualization_temperature():
+    return render_template('visualization_temperature.html')
+
+@app.route('/visualization-olympics')
+def visualization_olympics():
+    return render_template('visualization_olympics.html')
+
 @app.route('/sports-by-country', methods=['GET', 'POST'])
 def sports_by_country():
     if request.method == 'POST':
