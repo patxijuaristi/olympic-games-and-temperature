@@ -106,8 +106,8 @@ def get_best_country_in_sport(client, sport):
 # Para un país en concreto, devuelve la lista de deportes
 # en los que más medallas se han conesguido, incluyendo los
 # tipos de medallas que se han conseguido: oro, plata y bronce.
-def get_best_sport_for_country(client, country):
-    result = client['olympics']['athlete_events'].aggregate([
+def get_best_sport_for_country(client, country, explain):
+    pipeline = [
         {
             '$match': {
                 'Team': country, 
@@ -144,7 +144,12 @@ def get_best_sport_for_country(client, country):
         }, {
             '$sort': { 'total_medals': -1 }
         }
-    ])
+    ]
+
+    if explain:
+        result = client['olympics'].command('explain', { 'aggregate': 'athlete_events', 'pipeline': pipeline, 'cursor': {} },  verbosity='executionStats')
+    else:
+        result = client['olympics']['athlete_events'].aggregate(pipeline)
 
     return result
 

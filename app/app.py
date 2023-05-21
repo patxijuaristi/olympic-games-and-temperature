@@ -34,7 +34,7 @@ def visualization_olympics():
 def sports_by_country():
     if request.method == 'POST':
         country = request.form.get('country')
-        results = get_best_sport_for_country(client, country)
+        results = get_best_sport_for_country(client, country=country, explain=False)
 
         formatted_results = []
         for r in results:
