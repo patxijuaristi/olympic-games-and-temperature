@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}Indexes{% endblock %}
+
+{% block content %}
+    <div class="container mt-3 mb-5">
+        <div class="col-12 mb-4">
+          <h1>Indexes</h1>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 mb-3">
+              <div class="card result-card-green">
+                <div class="card-body">
+                  <h5 class="card-title">Sports by country</h5>
+                  <p class="card-text">Results obtained by a country in different sports.</p>
+                  <div class="col-12 text-center">
+                    <form action="" method="POST">
+                      <input type="hidden" name="index" value="sports_by_country">
+                      <div class="col-12 mt-3 mb-4">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                              <div class="input-group-text">📍</div>
+                          </div>
+                          <input type="text" class="form-control" id="country" name="country" placeholder="Country">
+                      </div>
+                      </div>                      
+                      <button type="submit" class="btn btn-success">🔍 Test</button>
+                    </form>
+                  </div>                  
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4 mb-3">
+                <div class="card result-card-green">
+                  <div class="card-body">
+                    <h5 class="card-title">Best country in sport</h5>
+                    <p class="card-text">Check which are the best countries for a sport</p>
+                    <div class="col-12 text-center">
+                      <form action="" method="POST">
+                        <input type="hidden" name="index" value="xxxxxxx">
+                        <button type="submit" class="btn btn-success">🔍 Test</button>
+                      </form>
+                    </div>                  
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4 mb-3">
+                <div class="card result-card-green">
+                  <div class="card-body">
+                    <h5 class="card-title">Country results by season</h5>
+                    <p class="card-text">Check if a country obtains better results in winter or summer olympic games.</p>
+                    <div class="col-12 text-center">
+                      <form action="" method="POST">
+                        <input type="hidden" name="index" value="yyyyyyy">
+                        <button type="submit" class="btn btn-success">🔍 Test</button>
+                      </form>
+                    </div>                  
+                  </div>
+                </div>
+              </div>
+          </div>
+          {% if result_without and result_with %}
+          <div class="row border-3 border-dark border-top mt-3">
+            <div class="col-12 mt-4 text-center">
+                {% if indexes_str %}
+                <div class="code">
+                  <p class="fw-bold mb-1">Used Indexes:</p>
+                  {% for index in indexes_str %}
+                  <p class="m-0 fst-italic">{{index}}</p>
+                  {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md-7 comparison">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="tl tl2"></th>
+                    <th class="indexes-test-h" style="border-top-left-radius: 5px; border-left:0px;">With Indexes</th>
+                    <th class="indexes-test-h" style="border-top-right-radius: 5px; border-right:0px;">Without Indexes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="compare-row">
+                    <td class="fw-bold">Execution Success</td>
+                    <td>✔️</td>
+                    <td>✔️</td>
+                  </tr>
+                  <tr class="compare-row">
+                    <td class="fw-bold">Query execution time</td>
+                    <td>{{result_with.execution_time}}ms</td>
+                    <td>{{result_without.execution_time}}ms</td>
+                  </tr>
+                  <tr class="compare-row">
+                    <td class="fw-bold">Documents returned</td>
+                    <td>{{result_with.n_returned}}</td>
+                    <td>{{result_without.n_returned}}</td>
+                  </tr>
+                  <tr class="compare-row">
+                    <td class="fw-bold">Index Keys Examined</td>
+                    <td>{{result_with.keys_examined}}</td>
+                    <td>{{result_without.keys_examined}}</td>
+                  </tr>
+                  <tr class="compare-row">
+                    <td class="fw-bold">Documents Examined</td>
+                    <td>{{result_with.docs_examined}}</td>
+                    <td>{{result_without.docs_examined}}</td>
+                  </tr>
+                  <tr class="compare-row">
+                    <td class="fw-bold">Used Indexes</td>
+                    <td>
+                      {% for index in result_with.indexes_used %}
+                      <p class="m-0">{{index}}</p>
+                      {% endfor %}
+                    </td>
+                    <td>❌</td>
+                  </tr>
+                </tbody>
+              </table>
+            
+            </div>
+          </div>
+          {% endif %}
+    </div>    
+{% endblock %}

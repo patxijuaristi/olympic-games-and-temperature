@@ -4,6 +4,7 @@ sys.path.append('..')
 from flask import Flask, render_template, request
 from pymongo import MongoClient
 from querys.querys import get_best_sport_for_country, get_best_country_in_sport, country_better_winter_or_summer, country_most_medals_by_temperature, compare_two_country_results_by_temperature, get_best_country_by_year
+from querys.indexes import get_results, remove_indexes, indexes_sports_by_country
 from dotenv import load_dotenv
 import os
 
@@ -29,6 +30,27 @@ def visualization_temperature():
 @app.route('/visualization-olympics')
 def visualization_olympics():
     return render_template('visualization_olympics.html')
+
+@app.route('/indexes', methods=['GET', 'POST'])
+def indexes():
+    if request.method == 'POST':
+        index = request.form.get('index')
+        country = request.form.get('country')
+        if index == '' or country == '':
+            return render_template('indexes.html')
+        
+        remove_indexes(client)
+        if index == 'sports_by_country':
+            without_indexes = get_best_sport_for_country(client, country=country, explain=True)
+            indexes_str = indexes_sports_by_country(client)
+            with_indexes = get_best_sport_for_country(client, country=country, explain=True)            
+
+            result_with = get_results(with_indexes, True)
+            result_without = get_results(without_indexes, False)
+            
+        return render_template('indexes.html', result_with=result_with, result_without=result_without, indexes_str=indexes_str)
+    else:
+        return render_template('indexes.html')
 
 @app.route('/sports-by-country', methods=['GET', 'POST'])
 def sports_by_country():
