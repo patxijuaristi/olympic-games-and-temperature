@@ -2,9 +2,9 @@ from datetime import datetime, timezone
 
 # Query que devuelve la temperatura media de una ciudad
 # entre un rango de fechas especifico, en unidades celsius
-def get_avg_temperature(client, city, start_date, end_date):
+def get_avg_temperature(client, city, start_date, end_date, explain):
 
-    result = client['olympics']['daily_temperature'].aggregate([
+    pipeline = [
         {
             # Con el comando addFields, añadimos un campo con el datetime concatenando los tres atributos de "Year", "Month" y "Day"
             '$addFields': {
@@ -51,20 +51,25 @@ def get_avg_temperature(client, city, start_date, end_date):
                 }
             }
         }
-    ])
+    ]
 
-    try:
-        first_result = round(next(result)['PeriodAvgTemperature'], 2)
-    except:
-        first_result = None
-    
-    return first_result
+    if explain:
+        return client['olympics'].command('explain', { 'aggregate': 'daily_temperature', 'pipeline': pipeline, 'cursor': {} },  verbosity='executionStats')
+    else:
+        result = client['olympics']['daily_temperature'].aggregate(pipeline)
+
+        try:
+            first_result = round(next(result)['PeriodAvgTemperature'], 2)
+        except:
+            first_result = None
+        
+        return first_result
 
 # Para un deporte en concreto, devuelve la lista de paises que
 # más medallas han conesguido en dicho deporte, incluyendo los
 # tipos de medallas que se han conseguido: oro, plata y bronce.
-def get_best_country_in_sport(client, sport):
-    result = client['olympics']['athlete_events'].aggregate([
+def get_best_country_in_sport(client, sport, explain):
+    pipeline = [
         {
             '$match': {
                 'Sport': sport, 
@@ -99,7 +104,12 @@ def get_best_country_in_sport(client, sport):
         }, {
             '$sort': { 'total_medals': -1 }
         }
-    ])
+    ]
+    
+    if explain:
+        result = client['olympics'].command('explain', { 'aggregate': 'athlete_events', 'pipeline': pipeline, 'cursor': {} },  verbosity='executionStats')
+    else:
+        result = client['olympics']['athlete_events'].aggregate(pipeline)
 
     return result
 

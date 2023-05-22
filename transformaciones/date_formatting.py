@@ -40,7 +40,7 @@ for i, row in df.iterrows():
     city = row['City']
     start_date = row['Opening ceremony']
     end_date = row['Closing ceremony']
-    avg_temp = get_avg_temperature(client, city, start_date, end_date)
+    avg_temp = get_avg_temperature(client, city, start_date, end_date, False)
     avg_temps.append(avg_temp)
 
 # Añadir la lista de temperaturas medias como una nueva columna en el data frame

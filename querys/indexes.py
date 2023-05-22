@@ -7,6 +7,8 @@ def find_indexes_used(data):
     if isinstance(data, dict):
         if 'indexesUsed' in data:
             return data['indexesUsed']
+        if 'indexName' in data:
+            return data['indexName']
         for value in data.values():
             result = find_indexes_used(value)
             if result is not None:
@@ -34,6 +36,8 @@ def get_results(result, with_indexes):
     if with_indexes:
         execution_stages = execution_stats.get('executionStages', {})
         indexes_used = find_indexes_used(execution_stages)
+        if not isinstance(indexes_used, list):
+            indexes_used = [indexes_used]
     else:
         indexes_used = None
     
@@ -46,18 +50,32 @@ def get_results(result, with_indexes):
     }
 
 def remove_indexes(client):
-    collection = client['olympics']['athlete_events']
-    collection.drop_indexes()
+    client['olympics']['athlete_events'].drop_indexes()
+    client['olympics']['daily_temperature'].drop_indexes()
     
 def indexes_sports_by_country(client):
     collection = client['olympics']['athlete_events']
-    collection.create_index([("Team", 1)], background=True)
+    collection.create_index([("Team", 1), ("Medal", 1)], background=True)
 
-    indexes_str = ['collection.create_index([("Team", 1)], background=True)']
+    indexes_str = 'db.collection.createIndex({ Team: 1, Medal: 1 })'
 
     return indexes_str
 
+def indexes_get_avg_temperature(client):
+    collection = client['olympics']['daily_temperature']
+    collection.create_index([("City", 1), ("Year", 1)], background=True)
 
+    indexes_str = 'db.collection.createIndex({ City: 1, Year: 1 })'
+
+    return indexes_str
+
+def indexes_get_best_country_in_sport(client):
+    collection = client['olympics']['athlete_events']
+    collection.create_index([("Sport", 1), ("Medal", 1)], background=True)
+
+    indexes_str = 'db.collection.createIndex({ Sport: 1, Medal: 1 })'
+
+    return indexes_str
 
 '''
 ------------- ESTO SE PUEDE UTILIZAR PARA TESTEAR ----------

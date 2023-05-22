@@ -33,11 +33,19 @@
             <div class="col-sm-4 mb-3">
                 <div class="card result-card-green">
                   <div class="card-body">
-                    <h5 class="card-title">Best country in sport</h5>
+                    <h5 class="card-title">Get average Temperature</h5>
                     <p class="card-text">Check which are the best countries for a sport</p>
                     <div class="col-12 text-center">
                       <form action="" method="POST">
-                        <input type="hidden" name="index" value="xxxxxxx">
+                        <input type="hidden" name="index" value="get_avg_temperature">
+                        <div class="col-12 mt-3 mb-4">
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">🌡️</div>
+                            </div>
+                            <input type="text" class="form-control" id="city" name="city" placeholder="City">
+                        </div>
+                        </div> 
                         <button type="submit" class="btn btn-success">🔍 Test</button>
                       </form>
                     </div>                  
@@ -47,11 +55,19 @@
               <div class="col-sm-4 mb-3">
                 <div class="card result-card-green">
                   <div class="card-body">
-                    <h5 class="card-title">Country results by season</h5>
-                    <p class="card-text">Check if a country obtains better results in winter or summer olympic games.</p>
+                    <h5 class="card-title">Best country in sport</h5>
+                    <p class="card-text">Check which are the best countries for a sport.</p>
                     <div class="col-12 text-center">
                       <form action="" method="POST">
-                        <input type="hidden" name="index" value="yyyyyyy">
+                        <input type="hidden" name="index" value="get_best_country_in_sport">
+                        <div class="col-12 mt-3 mb-4">
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">🏈</div>
+                            </div>
+                            <input type="text" class="form-control" id="sport" name="sport" placeholder="Sport">
+                        </div>
+                        </div> 
                         <button type="submit" class="btn btn-success">🔍 Test</button>
                       </form>
                     </div>                  
@@ -64,10 +80,8 @@
             <div class="col-12 mt-4 text-center">
                 {% if indexes_str %}
                 <div class="code">
-                  <p class="fw-bold mb-1">Used Indexes:</p>
-                  {% for index in indexes_str %}
-                  <p class="m-0 fst-italic">{{index}}</p>
-                  {% endfor %}
+                  <p class="fw-bold mb-1">Used Index:</p>
+                  <p class="code-index">{{indexes_str}}</p>
                 </div>
                 {% endif %}
             </div>
@@ -109,9 +123,13 @@
                   <tr class="compare-row">
                     <td class="fw-bold">Used Indexes</td>
                     <td>
+                      {% if result_with.indexes_used %}
                       {% for index in result_with.indexes_used %}
                       <p class="m-0">{{index}}</p>
                       {% endfor %}
+                      {% else %}
+                      ❌
+                      {% endif %}
                     </td>
                     <td>❌</td>
                   </tr>

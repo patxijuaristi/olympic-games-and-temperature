@@ -3,8 +3,8 @@ sys.path.append('..')
 
 from flask import Flask, render_template, request
 from pymongo import MongoClient
-from querys.querys import get_best_sport_for_country, get_best_country_in_sport, country_better_winter_or_summer, country_most_medals_by_temperature, compare_two_country_results_by_temperature, get_best_country_by_year
-from querys.indexes import get_results, remove_indexes, indexes_sports_by_country
+from querys.querys import get_best_sport_for_country, get_best_country_in_sport, country_better_winter_or_summer, country_most_medals_by_temperature, compare_two_country_results_by_temperature, get_best_country_by_year, get_avg_temperature
+from querys.indexes import get_results, remove_indexes, indexes_sports_by_country, indexes_get_avg_temperature, indexes_get_best_country_in_sport
 from dotenv import load_dotenv
 import os
 
@@ -35,18 +35,29 @@ def visualization_olympics():
 def indexes():
     if request.method == 'POST':
         index = request.form.get('index')
-        country = request.form.get('country')
-        if index == '' or country == '':
+        if index == '':
             return render_template('indexes.html')
         
         remove_indexes(client)
         if index == 'sports_by_country':
+            country = request.form.get('country')
             without_indexes = get_best_sport_for_country(client, country=country, explain=True)
             indexes_str = indexes_sports_by_country(client)
-            with_indexes = get_best_sport_for_country(client, country=country, explain=True)            
-
-            result_with = get_results(with_indexes, True)
-            result_without = get_results(without_indexes, False)
+            with_indexes = get_best_sport_for_country(client, country=country, explain=True)
+        elif index == 'get_avg_temperature':
+            city = request.form.get('city')
+            without_indexes = get_avg_temperature(client, city=city, start_date='01/01/2000', end_date='01/01/2001', explain=True)
+            indexes_str = indexes_get_avg_temperature(client)
+            with_indexes = get_avg_temperature(client, city=city, start_date='01/01/2000', end_date='01/01/2001', explain=True)
+        elif index == 'get_best_country_in_sport':
+            sport = request.form.get('sport')
+            without_indexes = get_best_country_in_sport(client, sport=sport, explain=True)
+            indexes_str = indexes_get_best_country_in_sport(client)
+            with_indexes = get_best_country_in_sport(client, sport=sport, explain=True)
+        else:
+            return render_template('indexes.html')
+        result_with = get_results(with_indexes, True)
+        result_without = get_results(without_indexes, False)
             
         return render_template('indexes.html', result_with=result_with, result_without=result_without, indexes_str=indexes_str)
     else:
@@ -83,7 +94,7 @@ def sports_by_country():
 def best_country_in_sport():
     if request.method == 'POST':
         sport = request.form.get('sport')
-        results = get_best_country_in_sport(client, sport)
+        results = get_best_country_in_sport(client, sport, False)
 
         formatted_results = []
         for r in results:
