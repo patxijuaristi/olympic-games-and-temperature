@@ -9,15 +9,17 @@ The project is structured in the next way:
 
 ```
 .
-├── app                # Flask app to show results
+├── app                  # Flask app to show results
 │
-├── data               # Folder that contains used datasets
+├── data                 # Folder that contains used datasets
 |
-├── querys             # MongoDB queries
+├── querys
+│   └── querys.py        # MongoDB queries
+│   └── indexes.py       # Creation and testing of indexes
 │
-├── regresion          # Jupyter notebook of regression work done to estimate temperatures
+├── regresion            # Jupyter notebook of regression work done to estimate temperatures
 │
-├── transformaciones   # Data pre-processing scripts
+├── transformaciones     # Data pre-processing scripts
 └── ...
 ```
 
